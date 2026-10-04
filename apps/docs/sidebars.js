@@ -27,6 +27,11 @@ const sidebars = {
       ],
     },
     {
+      type: "doc",
+      label: "WebGPU",
+      id: "webgpu",
+    },
+    {
       collapsed: true,
       type: "category",
       label: "Canvas",
@@ -156,11 +161,6 @@ const sidebars = {
         "animations/hooks",
         "animations/textures",
       ],
-    },
-    {
-      type: "doc",
-      label: "WebGPU",
-      id: "webgpu",
     },
     {
       type: "doc",

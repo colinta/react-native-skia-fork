@@ -6,7 +6,7 @@ slug: /canvas/graphite
 ---
 
 `SkiaGraphiteView` is a canvas that you drive frame by frame from any JavaScript runtime.
-A frame is a [Graphite](/docs/getting-started/installation#graphite) recording: you record it on the thread you are on (the JS thread, the Reanimated UI runtime or a dedicated worklet runtime), and the view presents it on the next display frame.
+A frame is a Graphite recording: you record it on the thread you are on (the JS thread, the Reanimated UI runtime or a dedicated worklet runtime), and the view presents it on the next display frame.
 On the web, where Skia runs on WebGL, the same API is emulated: see [Web](#web) below.
 
 ## Recording a frame

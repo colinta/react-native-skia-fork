@@ -10,7 +10,7 @@ Skia serves as the graphics engine for Google Chrome and Chrome OS, Android, Flu
 
 :::info[React Native Skia v3]
 
-This is the documentation of React Native Skia v3, which renders with [Skia Graphite](#graphite) and is published on npm as `react-native-skia`.
+This is the documentation of React Native Skia v3, which renders with Skia Graphite and is published on npm as `react-native-skia`.
 
 - Upgrading from v2 or from `@shopify/react-native-skia`? Follow the [migration guide](/docs/getting-started/migration).
 - v2 is still maintained. Its documentation is available at [wcandillon.github.io/react-native-skia/v2](https://wcandillon.github.io/react-native-skia/v2/).
@@ -103,20 +103,9 @@ Use [expo-build-properties](https://docs.expo.dev/versions/latest/sdk/build-prop
 
 Then create the development build with `npx expo run:ios` and `npx expo run:android`.
 
-:::info
-
-The `with-skia` Expo template and Expo Go currently use v2: see the [v2 documentation](https://wcandillon.github.io/react-native-skia/v2/docs/getting-started/installation) if you rely on them.
-
-:::
-
 ## Web
 
 To use this library in the browser, see [these instructions](/docs/getting-started/web).
-
-## TV
-
-TV platforms (Apple TV and Android TV) are not supported by v3.
-They remain supported by v2 using [React Native TVOS](https://github.com/react-native-tvos/react-native-tvos): see the [v2 documentation](https://wcandillon.github.io/react-native-skia/v2/docs/getting-started/installation#tv).
 
 ## Debugging
 
@@ -148,23 +137,6 @@ module.exports = {
 
 The `jestEnv.js` will load CanvasKit for you and `jestSetup.js` mocks React Native Skia.
 You can also have a look at the [example app](https://github.com/wcandillon/react-native-skia/tree/main/apps/example) to see how Jest tests are enabled there.
-
-
-## Graphite
-
-Skia has two GPU backends: Ganesh and Graphite. Graphite is the newer one, designed for modern graphics APIs and for multithreaded rendering.
-Starting with v3, React Native Skia renders with Graphite. The Ganesh backend remains available on the v2 line (`react-native-skia@2`).
-
-Graphite runs on [Dawn](https://dawn.googlesource.com/dawn), Google's WebGPU implementation, on top of Metal on Apple platforms and Vulkan on Android.
-On the Web, React Native Skia runs on WebGL through [CanvasKit](/docs/getting-started/web).
-
-For your drawings, nothing changes: the API is the same on both backends. Graphite enables the following:
-
-- **Rendering off the main thread.** The `Canvas` produces its frames on a dedicated native thread pool (see [how frames are produced](/docs/canvas/overview#how-frames-are-produced)).
-- **Recording frames from any runtime.** The [Graphite View](/docs/canvas/graphite) lets you draw frame by frame from the JS thread, the Reanimated UI runtime, or a dedicated worklet runtime.
-- **WebGPU interop.** With [React Native WebGPU](https://wcandillon.github.io/react-native-webgpu/) installed, Skia and WebGPU share the same GPU device and can exchange textures without any copy. This also works with three.js (see [WebGPU](/docs/webgpu)).
-
-Dawn is an internal implementation detail: React Native Skia does not expose a WebGPU API itself.
 
 ## Playground
 

@@ -8,7 +8,7 @@ slug: /animations/textures
 A texture is an image that lives on the GPU.
 React Native Skia provides hooks that create textures off the JS thread and expose them as Reanimated shared values.
 
-With [Graphite](/docs/getting-started/installation#graphite), textures are shared between threads: a texture created on one thread can be drawn by any canvas and from any runtime.
+With Graphite, textures are shared between threads: a texture created on one thread can be drawn by any canvas and from any runtime.
 
 ## `useTexture`
 

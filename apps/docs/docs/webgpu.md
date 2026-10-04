@@ -5,7 +5,7 @@ sidebar_label: WebGPU
 slug: /webgpu
 ---
 
-React Native Skia renders with [Graphite](/docs/getting-started/installation#graphite), which runs on [Dawn](https://dawn.googlesource.com/dawn), Google's WebGPU implementation.
+React Native Skia renders with Graphite, which runs on [Dawn](https://dawn.googlesource.com/dawn), Google's WebGPU implementation.
 React Native Skia does not expose a WebGPU API itself. To use WebGPU in your app, install [React Native WebGPU](https://wcandillon.github.io/react-native-webgpu/) alongside it.
 
 When both packages are installed, they share a single copy of Dawn, and the GPU device Skia renders with becomes a regular WebGPU `GPUDevice`.

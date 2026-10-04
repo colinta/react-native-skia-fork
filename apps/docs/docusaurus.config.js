@@ -95,11 +95,21 @@ const config = {
           },
           // {to: '/blog', label: 'Blog', position: 'left'},
           {
-            // Frozen v2 build, deployed from the docs-v2 branch
-            label: "v2",
-            to: "pathname:///react-native-skia/v2/",
-            target: "_self",
+            type: "dropdown",
+            label: "latest",
             position: "right",
+            items: [
+              {
+                label: "latest (v3)",
+                to: "/docs/getting-started/installation",
+              },
+              {
+                // Frozen v2 build, deployed from the docs-v2 branch
+                label: "v2",
+                to: "pathname:///react-native-skia/v2/",
+                target: "_self",
+              },
+            ],
           },
           {
             label: "GitHub",

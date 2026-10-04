@@ -5,8 +5,15 @@ sidebar_label: Migrating to v3
 slug: /getting-started/migration
 ---
 
-React Native Skia v3 renders with [Skia Graphite](/docs/getting-started/installation#graphite) on iOS, macOS, and Android.
+React Native Skia v3 renders with Skia Graphite on iOS, macOS, and Android.
 Graphite is Skia's new GPU backend. In React Native Skia it runs on [Dawn](https://dawn.googlesource.com/dawn), Google's WebGPU implementation, which uses Metal on Apple platforms and Vulkan on Android.
+
+:::info[Staying on v2]
+
+v2 is still maintained. It renders with OpenGL ES on Android and has lower version requirements: it runs on Android devices below API level 26 or without Vulkan, and it supports tvOS, Android TV, Mac Catalyst, and Expo Go.
+If you need any of these, stay on v2 (`yarn add react-native-skia@2`) and use the [v2 documentation](https://wcandillon.github.io/react-native-skia/v2/).
+
+:::
 
 The drawing API is the same as in v2: components, hooks, shaders, and the imperative `Skia` API all work as before.
 What changes is the package name, the platform requirements, and a few `Canvas` props.
@@ -15,27 +22,6 @@ Most apps migrate in three steps:
 1. [Rename the package](#1-rename-the-package)
 2. [Check the platform requirements](#2-check-the-platform-requirements)
 3. [Update the Canvas props](#3-update-the-canvas-props)
-
-## v2 or v3?
-
-v2 is still maintained and keeps the Ganesh backend. Its documentation is available at [wcandillon.github.io/react-native-skia/v2](https://wcandillon.github.io/react-native-skia/v2/).
-
-| | v2 | v3 |
-|:--|:--|:--|
-| npm package | `react-native-skia@2` (`@shopify/react-native-skia` up to 2.14) | `react-native-skia` |
-| Skia backend | Ganesh | Graphite, on Dawn |
-| Android | OpenGL ES | Vulkan, API level 26 and above |
-| iOS and macOS | Metal | Metal, iOS 15.1 and above |
-| tvOS, Android TV, Mac Catalyst | Supported | Not supported |
-| Web | CanvasKit (WebGL) | CanvasKit (WebGL) |
-| Expo Go | Supported | Not supported, use a development build |
-| [WebGPU interop](/docs/webgpu) | No | Yes |
-
-Stay on v2 if you need one of the platforms that v3 does not support, or if you support Android devices below API level 26 or without Vulkan:
-
-```sh
-yarn add react-native-skia@2
-```
 
 ## 1. Rename the package
 
