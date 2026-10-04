@@ -9,11 +9,13 @@ export interface NativeProps extends ViewProps {
   nativeID: string;
   androidSurfaceType?: "auto" | "SurfaceView" | "TextureView";
   androidZOrderOnTop?: boolean;
+  webColorSpace?: "display-p3" | "srgb";
 }
 
 const SkiaViewNativeComponent = ({
   nativeID,
   onLayout,
+  webColorSpace,
   // Surface settings, never reach the DOM
   opaque: _opaque,
   highBitDepth: _highBitDepth,
@@ -24,6 +26,7 @@ const SkiaViewNativeComponent = ({
   return createElement(SkiaView, {
     nativeID,
     onLayout,
+    webColorSpace,
     ...viewProps,
   });
 };

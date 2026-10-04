@@ -7,6 +7,8 @@ import type { GrDirectContext, WebGLContextHandle } from "canvaskit-wasm";
 import type { SkRect, SkPicture, SkImage } from "../skia/types";
 import { JsiSkSurface } from "../skia/web/JsiSkSurface";
 
+import type { WebColorSpace } from "./types";
+
 // The WebGL renderers behind the web view (SkiaView.web):
 // a <canvas> element, its WebGL context and the CanvasKit surface built on
 // it, with the context-loss handling and the "destroy the context after each
@@ -93,7 +95,10 @@ export class WebGLRenderer implements Renderer {
     private canvas: HTMLCanvasElement,
     // Called when the renderer becomes able to paint again and the current
     // frame should be drawn.
-    private requestRedraw: () => void
+    private requestRedraw: () => void,
+    // What the browser assumes the drawing buffer holds. The surface is
+    // always sRGB: "display-p3" shows sRGB values as P3, "srgb" as drawn.
+    private colorSpace: WebColorSpace = "display-p3"
   ) {
     const entry = canvasWebGL.get(canvas);
     if (entry) {
@@ -142,7 +147,7 @@ export class WebGLRenderer implements Renderer {
     this.contextHandle = handle;
     this.grContext = grContext;
     if (entry) {
-      entry.gl.drawingBufferColorSpace = "display-p3";
+      entry.gl.drawingBufferColorSpace = this.colorSpace;
     }
     this.onResize();
   }
@@ -337,7 +342,10 @@ export class StaticWebGLRenderer implements Renderer {
   private cachedImage: SkImage | null = null;
   private pd = 1;
 
-  constructor(private canvas: HTMLCanvasElement) {}
+  constructor(
+    private canvas: HTMLCanvasElement,
+    private colorSpace: WebColorSpace = "display-p3"
+  ) {}
 
   onResize(): void {
     this.cachedImage = null;
@@ -368,7 +376,7 @@ export class StaticWebGLRenderer implements Renderer {
       }
       const ctx = tempCanvas.getContext("webgl2");
       if (ctx) {
-        ctx.drawingBufferColorSpace = "display-p3";
+        ctx.drawingBufferColorSpace = this.colorSpace;
       }
       const webglSurface = CanvasKit.MakeOnScreenGLSurface(
         grContext,
@@ -556,6 +564,7 @@ export interface WebRendererHost {
 export const useSkiaWebRenderer = (
   canvasRef: RefObject<HTMLCanvasElement | null>,
   isStatic: boolean,
+  colorSpace: WebColorSpace,
   host: WebRendererHost
 ): RefObject<Renderer | null> => {
   const rendererRef = useRef<Renderer | null>(null);
@@ -570,8 +579,12 @@ export const useSkiaWebRenderer = (
       return undefined;
     }
     const renderer: Renderer = isStatic
-      ? new StaticWebGLRenderer(canvas)
-      : new WebGLRenderer(canvas, () => hostRef.current.paint(renderer));
+      ? new StaticWebGLRenderer(canvas, colorSpace)
+      : new WebGLRenderer(
+          canvas,
+          () => hostRef.current.paint(renderer),
+          colorSpace
+        );
     rendererRef.current = renderer;
 
     const paint = () => hostRef.current.paint(renderer);
@@ -650,7 +663,7 @@ export const useSkiaWebRenderer = (
       rendererRef.current = null;
       renderer.dispose();
     };
-  }, [canvasRef, isStatic]);
+  }, [canvasRef, isStatic, colorSpace]);
 
   return rendererRef;
 };

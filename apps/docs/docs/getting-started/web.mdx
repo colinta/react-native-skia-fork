@@ -189,6 +189,24 @@ export default function App() {
 }
 ```
 
+## Color Space
+
+On the web, a canvas draws into an sRGB surface and tags the WebGL drawing buffer `display-p3`, so on a wide-gamut display saturated colors look more vivid than on iOS and Android.
+To show the colors as drawn, for instance to match other sRGB content on the page, set `web={{ colorSpace: "srgb" }}`.
+The prop is ignored on native.
+
+```tsx twoslash
+import { Canvas, Fill } from "react-native-skia";
+
+export default function App() {
+  return (
+    <Canvas style={{ flex: 1 }} web={{ colorSpace: "srgb" }}>
+      <Fill color="#3FAE3A" />
+    </Canvas>
+  );
+}
+```
+
 ## Unsupported Features
 
 The following React Native Skia APIs are currently unsupported on React Native Web.

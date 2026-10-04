@@ -26,6 +26,7 @@ import type {
 import { SkiaViewNativeId } from "./SkiaViewNativeId";
 import { useSkiaWebRenderer } from "./SkiaWebRenderer";
 import type { Renderer, WebFrame } from "./SkiaWebRenderer";
+import type { WebColorSpace } from "./types";
 
 // The web has no Graphite: the view paints pictures on a WebGL canvas (with
 // context-loss recovery and the destroy-context-after-render mode). It shows
@@ -44,6 +45,8 @@ export interface SkiaViewHandle extends SkiaWebViewHandle {
 export interface SkiaViewProps extends ViewProps {
   ref?: React.Ref<SkiaViewHandle>;
   __destroyWebGLContextAfterRender?: boolean;
+  /** Color space of the WebGL drawing buffer, display-p3 by default. */
+  webColorSpace?: WebColorSpace;
 }
 
 /**
@@ -165,6 +168,7 @@ export const SkiaView = (props: SkiaViewProps) => {
   );
 
   const isStatic = props.__destroyWebGLContextAfterRender === true;
+  const colorSpace = props.webColorSpace ?? "display-p3";
 
   // Presents the recordings submitted since the last frame. A frame that
   // cannot be painted yet (unmeasured canvas, lost context) stays queued for
@@ -198,7 +202,7 @@ export const SkiaView = (props: SkiaViewProps) => {
     },
     [present]
   );
-  const rendererRef = useSkiaWebRenderer(canvasRef, isStatic, {
+  const rendererRef = useSkiaWebRenderer(canvasRef, isStatic, colorSpace, {
     paint,
     onLayout,
   });
@@ -395,6 +399,7 @@ export const SkiaView = (props: SkiaViewProps) => {
     onLayout: _onLayout,
     nativeID: _nativeID,
     __destroyWebGLContextAfterRender: _isStatic,
+    webColorSpace: _webColorSpace,
     ...viewProps
   } = props;
   return (

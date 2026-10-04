@@ -55,6 +55,7 @@ interface MountOptions {
   onLayout?: () => void;
   strict?: boolean;
   isStatic?: boolean;
+  colorSpace?: "display-p3" | "srgb";
 }
 
 const mountView = (nativeID: string, options: MountOptions = {}) => {
@@ -65,12 +66,14 @@ const mountView = (nativeID: string, options: MountOptions = {}) => {
     onLayout,
     strict = false,
     isStatic = false,
+    colorSpace,
   }: MountOptions) => {
     const view = (
       <SkiaView
         nativeID={nativeID}
         onLayout={onLayout}
         __destroyWebGLContextAfterRender={isStatic}
+        webColorSpace={colorSpace}
         style={{ width: 360, height: 520 }}
       />
     );
@@ -382,6 +385,45 @@ describe("SkiaView.web", () => {
     expect(ctx.lost).toBe(true);
     expect(registry.size).toBe(0);
     expect(contexts.has(staticCanvas)).toBe(false);
+
+    await view.unmount();
+  });
+
+  it("tags the drawing buffer display-p3 unless sRGB is requested", async () => {
+    installCanvasKit();
+    canvasSize.width = 360;
+    canvasSize.height = 520;
+
+    const wide = mountView("11");
+    expect(contextOf(wide.canvas()).drawingBufferColorSpace).toBe("display-p3");
+    await wide.unmount();
+
+    const srgb = mountView("12", { colorSpace: "srgb" });
+    expect(contextOf(srgb.canvas()).drawingBufferColorSpace).toBe("srgb");
+    await srgb.unmount();
+  });
+
+  it("applies a color space change to the same canvas and repaints", async () => {
+    const { CanvasKitMock, rawCanvas } = installCanvasKit();
+    canvasSize.width = 360;
+    canvasSize.height = 520;
+
+    const view = mountView("13");
+    await setPicture(13);
+    const canvas = view.canvas();
+    const ctx = contextOf(canvas);
+    expect(ctx.drawingBufferColorSpace).toBe("display-p3");
+    rawCanvas.drawPicture.mockClear();
+
+    view.render({ colorSpace: "srgb" });
+    await flushMicrotasks();
+    expect(view.canvas()).toBe(canvas);
+    expect(ctx.lost).toBe(false);
+    expect(ctx.drawingBufferColorSpace).toBe("srgb");
+    // Changing the color space clears the buffer: the picture is painted
+    // again on the new surface.
+    expect(CanvasKitMock.MakeOnScreenGLSurface).toHaveBeenCalledTimes(2);
+    expect(rawCanvas.drawPicture).toHaveBeenCalledWith(fakePicture.ref);
 
     await view.unmount();
   });

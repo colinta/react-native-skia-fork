@@ -6,6 +6,7 @@ import { Platform } from "../Platform";
 
 import { SkiaViewApi } from "./api";
 import { androidNativeProps } from "./android";
+import { webNativeProps } from "./web";
 import type { SkiaGraphiteViewNativeProps } from "./types";
 import { SkiaViewNativeId } from "./SkiaViewNativeId";
 
@@ -46,6 +47,7 @@ export const SkiaGraphiteView = ({
   opaque = false,
   highBitDepth = false,
   android,
+  web,
   ref,
   ...viewProps
 }: SkiaGraphiteViewProps) => {
@@ -84,6 +86,7 @@ export const SkiaGraphiteView = ({
       opaque={opaque}
       highBitDepth={highBitDepth}
       {...androidNativeProps(android)}
+      {...webNativeProps(web)}
       {...viewProps}
     />
   );

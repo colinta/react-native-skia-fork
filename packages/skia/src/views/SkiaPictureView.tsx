@@ -5,6 +5,7 @@ import SkiaViewNativeComponent from "../specs/SkiaViewNativeComponent";
 
 import { SkiaViewApi } from "./api";
 import { androidNativeProps } from "./android";
+import { webNativeProps } from "./web";
 import type { SkiaPictureViewNativeProps } from "./types";
 import { SkiaViewNativeId } from "./SkiaViewNativeId";
 
@@ -83,6 +84,7 @@ export class SkiaPictureView extends React.Component<SkiaPictureViewProps> {
       opaque = false,
       highBitDepth = false,
       android,
+      web,
       ...viewProps
     } = this.props;
     return (
@@ -92,6 +94,7 @@ export class SkiaPictureView extends React.Component<SkiaPictureViewProps> {
         opaque={opaque}
         highBitDepth={highBitDepth}
         {...androidNativeProps(android)}
+        {...webNativeProps(web)}
         {...viewProps}
       />
     );
