@@ -21,9 +21,9 @@ const sidebars = {
       items: [
         "getting-started/installation",
         "getting-started/hello-world",
+        "getting-started/migration",
         "getting-started/web",
         "getting-started/headless",
-        "getting-started/bundle-size",
       ],
     },
     {
@@ -156,6 +156,11 @@ const sidebars = {
         "animations/hooks",
         "animations/textures",
       ],
+    },
+    {
+      type: "doc",
+      label: "WebGPU",
+      id: "webgpu",
     },
     {
       type: "doc",

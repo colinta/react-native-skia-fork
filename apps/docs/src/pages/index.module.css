@@ -19,6 +19,20 @@
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   align-items: center;
   justify-content: center;
+}
+
+/* Outline button that stays readable on the primary hero background */
+.buttons .outline {
+  --ifm-button-color: #fff;
+  --ifm-button-border-color: #fff;
+  --ifm-button-background-color: transparent;
+}
+
+.buttons .outline:hover {
+  --ifm-button-color: var(--ifm-color-primary);
+  --ifm-button-background-color: #fff;
 }

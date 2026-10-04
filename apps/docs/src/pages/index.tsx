@@ -25,6 +25,12 @@ function HomepageHeader() {
           >
             Documentation
           </Link>
+          <Link
+            className={clsx("button button--lg", styles.outline)}
+            to="/docs/getting-started/migration"
+          >
+            Migrating to v3
+          </Link>
         </div>
       </div>
     </header>
