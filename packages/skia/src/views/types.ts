@@ -25,6 +25,18 @@ export interface AndroidCanvasProps {
   zOrderOnTop?: boolean;
 }
 
+export type WebColorSpace = "display-p3" | "srgb";
+
+export interface WebCanvasProps {
+  /**
+   * Color space the browser assumes for the canvas's WebGL drawing buffer.
+   * Defaults to `display-p3`. The surface is drawn in sRGB, so with
+   * `display-p3` the browser reads sRGB values as P3 and saturated colors
+   * come out more vivid than on native; `srgb` shows them as drawn.
+   */
+  colorSpace?: WebColorSpace;
+}
+
 export interface ISkiaViewApi {
   web?: boolean;
   setJsiProperty: <T>(nativeId: number, name: string, value: T) => void;
@@ -75,6 +87,9 @@ export interface SkiaBaseViewProps extends ViewProps {
 
   /** Android-only rendering options. Ignored on iOS and web. */
   android?: AndroidCanvasProps;
+
+  /** Web-only rendering options. Ignored on iOS and Android. */
+  web?: WebCanvasProps;
 
   // On web, only 16 WebGL contextes are allowed. If the drawing is non-animated, set
   // __destroyWebGLContextAfterRender to true to release the context after each draw.

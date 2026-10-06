@@ -20,7 +20,8 @@ import type { SharedValue } from "react-native-reanimated";
 import Rea from "../external/reanimated/ReanimatedProxy";
 import { SkiaViewNativeId } from "../views/SkiaViewNativeId";
 import { androidNativeProps } from "../views/android";
-import type { AndroidCanvasProps } from "../views/types";
+import { webNativeProps } from "../views/web";
+import type { AndroidCanvasProps, WebCanvasProps } from "../views/types";
 import SkiaViewNativeComponent from "../specs/SkiaViewNativeComponent";
 import type { SkImage, SkRect, SkSize } from "../skia/types";
 import { SkiaSGRoot } from "../sksg/Reconciler";
@@ -83,6 +84,8 @@ export interface CanvasProps extends Omit<ViewProps, "onLayout"> {
   highBitDepth?: boolean;
   /** Android-only rendering options. Ignored on iOS and web. */
   android?: AndroidCanvasProps;
+  /** Web-only rendering options. Ignored on iOS and Android. */
+  web?: WebCanvasProps;
   ref?: React.Ref<CanvasRef>;
   __destroyWebGLContextAfterRender?: boolean;
 }
@@ -195,6 +198,7 @@ export const Canvas = ({
   onSize,
   highBitDepth = false,
   android,
+  web,
   ref,
   onLayout,
   ...viewProps
@@ -226,6 +230,7 @@ export const Canvas = ({
       opaque={opaque}
       highBitDepth={highBitDepth}
       {...androidNativeProps(android)}
+      {...webNativeProps(web)}
       onLayout={
         Platform.OS === "web" && (onSize || onLayout) ? onLayoutWeb : onLayout
       }
